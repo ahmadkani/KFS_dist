@@ -1,5 +1,5 @@
-import { L as g, c as d } from "./configES6-cRERl-FC.js";
-const c = new g(d.logging.ServiceWorkerRegistration);
+import { g, L as d } from "./configES6-_CidsW4_.js";
+const l = await g(), c = new d(l.logging.ServiceWorkerRegistration);
 function t(...o) {
   c.consoleDotLog(...o);
 }
@@ -7,7 +7,7 @@ function s(...o) {
   c.consoleDotError(...o);
 }
 let i;
-class l {
+class u {
   constructor() {
     "serviceWorker" in navigator && navigator.serviceWorker.addEventListener("controllerchange", () => {
       t("Service Worker controller changed."), i && (i.close(), i = null), window.location.reload();
@@ -60,8 +60,8 @@ class l {
     e.sync.register("my-sync").then(() => t("Sync registered")).catch((r) => s("Sync registration failed:", r));
   }
 }
-const f = new l();
+const w = new u();
 export {
-  f as serviceWorker
+  w as serviceWorker
 };
 //# sourceMappingURL=sw-register.js.map
