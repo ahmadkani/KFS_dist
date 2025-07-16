@@ -1,7 +1,6 @@
-import { L as E, c as y, g as V } from "./configES6-_CidsW4_.js";
-import { s as he } from "./configES6-_CidsW4_.js";
+import { L as E, c as y, g as V } from "./configES6-vU0hiYhv.js";
 import { L as j } from "./index-jVhJ2jaE.js";
-import { serviceWorker as ue } from "./sw-register.js";
+import { serviceWorker as he } from "./sw-register.js";
 var v = function(n) {
   var e = this;
   this.rpc_counter = 0, this.channel = n, this.foreign = /* @__PURE__ */ new Map(), this.local = /* @__PURE__ */ new Map(), this.calls = /* @__PURE__ */ new Map(), this.queue = [], this.connectionEstablished = !1, this.channel.addEventListener("message", function(t) {
@@ -268,12 +267,12 @@ class z {
       const i = r.isDirectory ? "dentry" : "inode", s = await this.workerThread.execute("getPathNote", {
         path: e
       });
-      (s?.error || !s || !s?.paths?.[t]) && g(`No note found for ${e}, returning basic stats`);
+      (s.error || !s || !s?.paths?.[t]) && g(`No note found for ${e}, returning basic stats`);
       const o = s?.paths?.[t]?.metadata || s, a = {
         // Standard fs.Stats properties
         dev: 0,
         inode: o.inode || o.dentry_id || 0,
-        mode: parseInt(o.mode, 8) || (r?.isDirectory ? 16877 : 33188),
+        mode: parseInt(o.mode, 8) || (r.isDirectory ? 16877 : 33188),
         nlink: 1,
         uid: o.uid || 1e3,
         gid: o.gid || 1e3,
@@ -571,12 +570,12 @@ class K {
       const i = r.isDirectory ? "dentry" : "inode", s = await this.workerThread.execute("getPathNote", {
         path: e
       });
-      (s?.error || !s || !s?.paths?.[t]) && d(`No note found for ${e}, returning basic stats`);
+      (s.error || !s || !s?.paths?.[t]) && d(`No note found for ${e}, returning basic stats`);
       const o = s?.paths?.[t]?.metadata || s, a = {
         // Standard fs.Stats properties
         dev: 0,
         ino: o.inode || o.dentry_id || 0,
-        mode: parseInt(o.mode, 8) || (r?.isDirectory ? 16877 : 33188),
+        mode: parseInt(o.mode, 8) || (r.isDirectory ? 16877 : 33188),
         nlink: 1,
         uid: o.uid || 1e3,
         gid: o.gid || 1e3,
@@ -1567,6 +1566,7 @@ function m(...n) {
   B.consoleDotError("[VFS] ", ...n);
 }
 class ee {
+  // Initialization and Core Setup
   constructor(e = "VFS_Mounts") {
     this.mounts = /* @__PURE__ */ Object.create(null), this.initializedMounts = /* @__PURE__ */ new Set(), this.vfsUtilsInstances = /* @__PURE__ */ new Map(), this.storageUtils = new X(e), this.currentMountPath = "", this.idbSupported = null, (async () => {
       try {
@@ -2286,7 +2286,6 @@ class ae {
 }
 export {
   ae as KFS,
-  ue as serviceWorker,
-  he as setConfig
+  he as serviceWorker
 };
 //# sourceMappingURL=kfs.js.map

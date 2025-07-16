@@ -1,4 +1,4 @@
-import { g, L as d } from "./configES6-_CidsW4_.js";
+import { g, L as d } from "./configES6-vU0hiYhv.js";
 const l = await g(), c = new d(l.logging.ServiceWorkerRegistration);
 function t(...o) {
   c.consoleDotLog(...o);

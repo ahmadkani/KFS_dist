@@ -1,6 +1,6 @@
 var Ja = (i, e) => () => (e || i((e = { exports: {} }).exports, e), e.exports);
 import { g as qt, B as ne, L as yr } from "./index-jVhJ2jaE.js";
-import { L as Fr, c as Pr } from "./configES6-_CidsW4_.js";
+import { L as Fr, c as Pr } from "./configES6-vU0hiYhv.js";
 var ol = Ja((Tr, Ki) => {
   function Qa(i) {
     return i && i.__esModule && Object.prototype.hasOwnProperty.call(i, "default") ? i.default : i;
