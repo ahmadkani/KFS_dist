@@ -1,0 +1,38 @@
+{
+  "corsProxy": "http://localhost:9000/",
+  "dir": "/",
+  "logging": {
+    "vfs": false,
+    "kfs": false,
+    "IDBFs": false,
+    "gitWorker": false,
+    "acl": false,
+    "stats": false,
+    "fsType": false,
+    "fsManagerES6": false,
+    "fsManagerGlobal": false,
+    "swUtils": false,
+    "memoryFS": false,
+    "memoryBackendES6": false,
+    "memoryBackendGlobal": false,
+    "VFSutils": false,
+    "gitNoteManager": false,
+    "ServiceWorkerRegistration": false,
+    "serviceWorker": false,
+    "storageUtils": false,
+    "supportChecker": false,
+    "dotGit": false,
+    "GitAuth": false,
+    "WorkerPool": false
+  },
+  "versioning": {
+    "strategy": "immediate",
+    "interval": 10,
+    "number": 5
+  },
+  "merging": {
+    "strategy": "immediate",
+    "interval": 60,
+    "onConflictStrategy": "remote"
+  }
+}

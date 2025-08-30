@@ -1,9 +1,9 @@
-import { L as E, c as y, g as V } from "./configES6-vU0hiYhv.js";
-import { L as j } from "./index-jVhJ2jaE.js";
-import { serviceWorker as he } from "./sw-register.js";
-var v = function(n) {
+import { g as D, L as E } from "./configES6-CEaFOXV3.js";
+import { L as K } from "./index-jVhJ2jaE.js";
+import { serviceWorker as pe } from "./sw-register.js";
+var v = function(a) {
   var e = this;
-  this.rpc_counter = 0, this.channel = n, this.foreign = /* @__PURE__ */ new Map(), this.local = /* @__PURE__ */ new Map(), this.calls = /* @__PURE__ */ new Map(), this.queue = [], this.connectionEstablished = !1, this.channel.addEventListener("message", function(t) {
+  this.rpc_counter = 0, this.channel = a, this.foreign = /* @__PURE__ */ new Map(), this.local = /* @__PURE__ */ new Map(), this.calls = /* @__PURE__ */ new Map(), this.queue = [], this.connectionEstablished = !1, this.channel.addEventListener("message", function(t) {
     var r = t.data;
     if (r && typeof r == "object") switch (r.type) {
       case "MP_INIT":
@@ -17,77 +17,77 @@ var v = function(n) {
     }
   }), this.channel.postMessage({ type: "MP_INIT", id: 1, reply: !0 });
 };
-v.prototype.onInit = function(n) {
+v.prototype.onInit = function(a) {
   this.connectionEstablished = !0;
   var e = this.queue;
   this.queue = [];
   for (var t = 0, r = e; t < r.length; t += 1)
     this.channel.postMessage(r[t]);
-  n.reply && this.channel.postMessage({ type: "MP_INIT", reply: !1 });
-}, v.prototype.onSet = function(n) {
-  for (var e = this, t = {}, r = n.object, i = function() {
-    var h = o[s], u = !n.void.includes(h);
+  a.reply && this.channel.postMessage({ type: "MP_INIT", reply: !1 });
+}, v.prototype.onSet = function(a) {
+  for (var e = this, t = {}, r = a.object, i = function() {
+    var h = o[s], f = !a.void.includes(h);
     t[h] = function() {
-      for (var f = [], p = arguments.length; p--; ) f[p] = arguments[p];
-      return e.rpc_counter = (e.rpc_counter + 1) % Number.MAX_SAFE_INTEGER, new Promise(function(D, T) {
-        e.postMessage({ type: "MP_CALL", object: r, method: h, id: e.rpc_counter, args: f, reply: u }), u ? e.calls.set(e.rpc_counter, { resolve: D, reject: T }) : D();
+      for (var u = [], y = arguments.length; y--; ) u[y] = arguments[y];
+      return e.rpc_counter = (e.rpc_counter + 1) % Number.MAX_SAFE_INTEGER, new Promise(function(k, T) {
+        e.postMessage({ type: "MP_CALL", object: r, method: h, id: e.rpc_counter, args: u, reply: f }), f ? e.calls.set(e.rpc_counter, { resolve: k, reject: T }) : k();
       });
     };
-  }, s = 0, o = n.methods; s < o.length; s += 1) i();
-  var a = this.foreign.get(n.object);
-  this.foreign.set(n.object, t), typeof a == "function" && a(t);
-}, v.prototype.onCall = function(n) {
-  var e = this, t = this.local.get(n.object);
-  t && t[n.method].apply(t, n.args).then(function(r) {
-    return n.reply && e.channel.postMessage({ type: "MP_RETURN", id: n.id, result: r });
+  }, s = 0, o = a.methods; s < o.length; s += 1) i();
+  var n = this.foreign.get(a.object);
+  this.foreign.set(a.object, t), typeof n == "function" && n(t);
+}, v.prototype.onCall = function(a) {
+  var e = this, t = this.local.get(a.object);
+  t && t[a.method].apply(t, a.args).then(function(r) {
+    return a.reply && e.channel.postMessage({ type: "MP_RETURN", id: a.id, result: r });
   }).catch(function(r) {
-    return e.channel.postMessage({ type: "MP_RETURN", id: n.id, error: r.message });
+    return e.channel.postMessage({ type: "MP_RETURN", id: a.id, error: r.message });
   });
-}, v.prototype.onReturn = function(n) {
-  if (this.calls.has(n.id)) {
-    var e = this.calls.get(n.id), t = e.resolve, r = e.reject;
-    this.calls.clear(n.id), n.error ? r(n.error) : t(n.result);
+}, v.prototype.onReturn = function(a) {
+  if (this.calls.has(a.id)) {
+    var e = this.calls.get(a.id), t = e.resolve, r = e.reject;
+    this.calls.clear(a.id), a.error ? r(a.error) : t(a.result);
   }
-}, v.prototype.postMessage = function(n) {
-  this.connectionEstablished ? this.channel.postMessage(n) : this.queue.push(n);
-}, v.prototype.set = function(n, e, t) {
-  t === void 0 && (t = {}), this.local.set(n, e);
+}, v.prototype.postMessage = function(a) {
+  this.connectionEstablished ? this.channel.postMessage(a) : this.queue.push(a);
+}, v.prototype.set = function(a, e, t) {
+  t === void 0 && (t = {}), this.local.set(a, e);
   var r = Object.entries(e).filter(function(i) {
     return typeof i[1] == "function";
   }).map(function(i) {
     return i[0];
   });
-  this.postMessage({ type: "MP_SET", object: n, methods: r, void: t.void || [] });
-}, v.prototype.get = function(n) {
+  this.postMessage({ type: "MP_SET", object: a, methods: r, void: t.void || [] });
+}, v.prototype.get = function(a) {
   return new Promise(function(e, t) {
     var r = this;
-    return this.foreign.has(n) ? e(this.foreign.get(n)) : e(new Promise(function(i, s) {
-      return r.foreign.set(n, i);
+    return this.foreign.has(a) ? e(this.foreign.get(a)) : e(new Promise(function(i, s) {
+      return r.foreign.set(a, i);
     }));
   }.bind(this));
 };
-function G(n) {
-  var e = new v(n);
+function Q(a) {
+  var e = new v(a);
   Object.defineProperties(this, { get: { writable: !1, configurable: !1, value: e.get.bind(e) }, set: { writable: !1, configurable: !1, value: e.set.bind(e) } });
 }
-function H(n) {
+function J(a) {
   return new Worker(
     "/workers/gitWorker.js",
     {
       type: "module",
-      name: n?.name
+      name: a?.name
     }
   );
 }
-const R = new E(y.logging.WorkerPool);
-function I(...n) {
-  R.consoleDotLog("[WorkerPool]", ...n);
+const X = await D(), W = new E(X.logging.WorkerPool);
+function I(...a) {
+  W.consoleDotLog("[WorkerPool]", ...a);
 }
-function _(...n) {
-  R.consoleDotError("[WorkerPool]", ...n);
+function z(...a) {
+  W.consoleDotError("[WorkerPool]", ...a);
 }
 I("Loading workerPool.");
-class q {
+class Y {
   constructor(e = null) {
     this.workers = /* @__PURE__ */ new Map(), this.workerCount = 0, this.WorkerClass = e || (typeof Worker < "u" ? Worker : null);
   }
@@ -97,24 +97,24 @@ class q {
         throw new Error("Worker class not available in this environment");
       if (!this.workers.has(e)) {
         I(`Creating new worker for ${e}`);
-        const i = new H();
+        const i = new J();
         i.onerror = (h) => {
-          throw _("Worker error:", h), _("Error details:", {
+          throw z("Worker error:", h), z("Error details:", {
             filename: h.filename,
             lineno: h.lineno,
             colno: h.colno,
             message: h.message
           }), h;
         };
-        const s = new G(i), o = await Promise.race([
+        const s = new Q(i), o = await Promise.race([
           s.get("workerThread"),
           new Promise(
-            (h, u) => setTimeout(() => u(new Error("Worker thread timeout")), 5e3)
+            (h, f) => setTimeout(() => f(new Error("Worker thread timeout")), 5e3)
           )
         ]);
         I("Worker thread obtained, waiting for readiness..."), await o.ready(), I("Worker is ready");
-        const a = typeof navigator < "u" && "serviceWorker" in navigator;
-        await o.execute("setSWUsage", { supportsServiceWorker: a, useSW: t }), this.workers.set(e, {
+        const n = typeof navigator < "u" && "serviceWorker" in navigator;
+        await o.execute("setSWUsage", { supportsServiceWorker: n, useSW: t }), this.workers.set(e, {
           worker: i,
           portal: s,
           thread: o,
@@ -124,7 +124,7 @@ class q {
       const r = this.workers.get(e);
       return r.users++, r;
     } catch (r) {
-      throw _(`Failed to get worker for ${e}:`, r), r;
+      throw z(`Failed to get worker for ${e}:`, r), r;
     }
   }
   async releaseWorker(e) {
@@ -142,26 +142,26 @@ class q {
     return this.workerCount;
   }
 }
-const x = new q(), P = new E(y.logging.memoryFS);
-function g(...n) {
-  P.consoleDotLog("[ MemoryFS ] ", ...n);
+const C = new Y(), A = await D(), L = new E(A.logging.memoryFS);
+function g(...a) {
+  L.consoleDotLog("[ MemoryFS ] ", ...a);
 }
-function k(...n) {
-  P.consoleDotError("[ MemoryFS ] ", ...n);
+function p(...a) {
+  L.consoleDotError("[ MemoryFS ] ", ...a);
 }
 g("memoryFs loaded.");
-class z {
+class P {
   constructor(e, t = {}) {
-    this.fsName = e, this.fileDescriptors = /* @__PURE__ */ new Map(), this.fdCounter = 3, this.workerEntry = null, this.workerThread = null, this.useSW = t?.useSW || null, this.versioningStrategy = t?.versioning?.strategy || y.versioning.strategy, this.doImmediateCommit = this.versioningStrategy === "immediate", g(`MemoryFS created for ${e}`);
+    this.fsName = e, this.fileDescriptors = /* @__PURE__ */ new Map(), this.fdCounter = 3, this.workerEntry = null, this.workerThread = null, this.useSW = t?.useSW || null, this.versioningStrategy = t?.versioning?.strategy || A.versioning.strategy, this.doImmediateCommit = this.versioningStrategy === "immediate", g(`MemoryFS created for ${e}`);
   }
   async initializeWorker() {
-    this.workerEntry = await x.getWorker(this.fsName, this.useSW), this.workerThread = this.workerEntry.thread, await this.workerThread.execute("setFs", {
+    this.workerEntry = await C.getWorker(this.fsName, this.useSW), this.workerThread = this.workerEntry.thread, await this.workerThread.execute("setFs", {
       fsName: this.fsName,
       fsType: "memory"
     }), g(`Worker initialized for ${this.fsName}`);
   }
   async cleanup() {
-    this.workerEntry && (await x.releaseWorker(this.fsName), this.workerEntry = null, this.workerThread = null);
+    this.workerEntry && (await C.releaseWorker(this.fsName), this.workerEntry = null, this.workerThread = null);
   }
   async fs_fopen(e, t) {
     if (this.workerThread || await this.initializeWorker(), t.includes("w") || t.includes("a") || t.includes("x")) {
@@ -193,7 +193,7 @@ class z {
       const s = i.slice(r.pos, r.pos + t);
       return r.pos += s.length, g(`Read chunk: ${s}, new position: ${r.pos}`), s;
     } catch (i) {
-      throw k(`Error reading file ${r.path}:`, i), i;
+      throw p(`Error reading file ${r.path}:`, i), i;
     }
   }
   async fs_fwrite(e, t) {
@@ -205,8 +205,8 @@ class z {
       this.workerThread || await this.initializeWorker();
       const i = r.path.split("/").slice(0, -1).join("/");
       if (i) {
-        const a = await this.workerThread.execute("isDirectoryDot", { path: i });
-        if (!a.exists || !a.isDirectory)
+        const n = await this.workerThread.execute("isDirectoryDot", { path: i });
+        if (!n.exists || !n.isDirectory)
           throw new Error(`ENOENT: no such directory, open '${r.path}'`);
       }
       let o = await this.workerThread.execute("readFileDot", { filePath: r.path }).catch(() => "");
@@ -216,7 +216,7 @@ class z {
         doCommit: this.doImmediateCommit
       }), r.pos += t.length, g(`Content written to file ${r.path}, new position: ${r.pos}`), t.length;
     } catch (i) {
-      throw k(`Error writing to file ${r.path}:`, i), i;
+      throw p(`Error writing to file ${r.path}:`, i), i;
     }
   }
   async fs_fseek(e, t, r) {
@@ -229,7 +229,7 @@ class z {
       const s = await this.workerThread.execute("readFileDot", { filePath: i.path }).catch(() => "");
       return r === "SEEK_SET" ? i.pos = t : r === "SEEK_CUR" ? i.pos += t : r === "SEEK_END" && (i.pos = s.length + t), i.pos = Math.max(0, Math.min(i.pos, s.length)), g(`New position in file ${i.path}: ${i.pos}`), 0;
     } catch (s) {
-      throw k(`Error seeking in file ${i.path}:`, s), s;
+      throw p(`Error seeking in file ${i.path}:`, s), s;
     }
   }
   async fs_ftell(e) {
@@ -253,7 +253,7 @@ class z {
         doCommit: this.doImmediateCommit
       }), g(`File ${r.path} truncated to length: ${t}`), 0;
     } catch (i) {
-      throw k(`Error truncating file ${r.path}:`, i), i;
+      throw p(`Error truncating file ${r.path}:`, i), i;
     }
   }
   async fs_stat(e) {
@@ -268,7 +268,7 @@ class z {
         path: e
       });
       (s.error || !s || !s?.paths?.[t]) && g(`No note found for ${e}, returning basic stats`);
-      const o = s?.paths?.[t]?.metadata || s, a = {
+      const o = s?.paths?.[t]?.metadata || s, n = {
         // Standard fs.Stats properties
         dev: 0,
         inode: o.inode || o.dentry_id || 0,
@@ -307,9 +307,9 @@ class z {
         getNoteType: () => i,
         getAllPaths: () => s.filepath_metadata ? Object.keys(s.filepath_metadata) : [e]
       };
-      return g(`Retrieved detailed stats for ${e}`, a), a;
+      return g(`Retrieved detailed stats for ${e}`, n), n;
     } catch (t) {
-      if (k(`Error getting stats for path ${e}:`, t), t.message.includes("ENOENT"))
+      if (p(`Error getting stats for path ${e}:`, t), t.message.includes("ENOENT"))
         throw t;
     }
   }
@@ -333,7 +333,7 @@ class z {
         doCommit: this.doImmediateCommit
       }), 0;
     } catch (t) {
-      throw k(`Error removing file ${e}:`, t), t;
+      throw p(`Error removing file ${e}:`, t), t;
     }
   }
   async fs_mkdir(e) {
@@ -348,7 +348,7 @@ class z {
       const r = await this.workerThread.execute("isDirectoryDot", { path: e });
       if (r.exists) {
         if (r.isDirectory)
-          return k(`EEXIST: directory already exists, mkdir '${e}'`), -1;
+          return p(`EEXIST: directory already exists, mkdir '${e}'`), -1;
         throw new Error(`ENOTDIR: path exists but is not a directory, mkdir '${e}'`);
       }
       return await this.workerThread.execute("mkdirDot", {
@@ -356,7 +356,7 @@ class z {
         doCommit: this.doImmediateCommit
       }), 0;
     } catch (t) {
-      throw k(`Error creating directory ${e}:`, t), t;
+      throw p(`Error creating directory ${e}:`, t), t;
     }
   }
   async fs_rmdir(e) {
@@ -374,7 +374,7 @@ class z {
         doCommit: this.doImmediateCommit
       }), 0;
     } catch (t) {
-      throw k(`Error removing directory ${e}:`, t), t;
+      throw p(`Error removing directory ${e}:`, t), t;
     }
   }
   async fs_rename(e, t) {
@@ -393,7 +393,7 @@ class z {
         newPath: t
       }), 0;
     } catch (r) {
-      throw k(`Error renaming ${e} to ${t}:`, r), r;
+      throw p(`Error renaming ${e} to ${t}:`, r), r;
     }
   }
   async fs_opendir(e) {
@@ -406,7 +406,7 @@ class z {
         throw new Error(`ENOTDIR: not a directory, opendir '${e}'`);
       return await this.workerThread.execute("opendir", { path: e }), 0;
     } catch (t) {
-      throw k(`Error opening directory ${e}:`, t), t;
+      throw p(`Error opening directory ${e}:`, t), t;
     }
   }
   async fs_readdir(e, t = {}) {
@@ -420,7 +420,7 @@ class z {
         throw new Error(`ENOTDIR: not a directory, readdir '${e}'`);
       return ((await this.workerThread.execute("readDirDot", { path: e }))?.entries || []).map((o) => ({ path: o.path, type: o.type === "tree" ? "dir" : "file" }));
     } catch (r) {
-      throw k(`Error reading directory ${e}:`, r), r;
+      throw p(`Error reading directory ${e}:`, r), r;
     }
   }
   async fs_feof(e) {
@@ -435,7 +435,7 @@ class z {
       const i = t.pos >= r.length;
       return g(`EOF status for file ${t.path}: ${i}`), i;
     } catch (r) {
-      throw k(`Error checking EOF for file ${t.path}:`, r), r;
+      throw p(`Error checking EOF for file ${t.path}:`, r), r;
     }
   }
   async fs_fflush(e) {
@@ -445,26 +445,26 @@ class z {
     return g("Closing all file descriptors."), this.fileDescriptors.clear(), 0;
   }
 }
-const W = new E(y.logging.IDBFs);
-function d(...n) {
-  W.consoleDotLog("[IDBFS] ", ...n);
+const O = await D(), B = new E(O.logging.IDBFs);
+function d(...a) {
+  B.consoleDotLog("[IDBFS] ", ...a);
 }
-function $(...n) {
-  W.consoleDotError("[IDBFS] ", ...n);
+function $(...a) {
+  B.consoleDotError("[IDBFS] ", ...a);
 }
-class K {
+class Z {
   constructor(e, t = {}) {
-    this.fs = new j(e, t), this.fileDescriptors = /* @__PURE__ */ new Map(), this.fdCounter = 3, this.workerEntry = null, this.workerThread = null, this.fsName = e, this.useSW = t?.useSW || null, this.versioningStrategy = t?.versioning?.strategy || y.versioning.strategy, this.doImmediateCommit = this.versioningStrategy === "immediate", (async () => await this.initializeWorker())(), d("IDBFS initialized with LightningFS.");
+    this.fs = new K(e, t), this.fileDescriptors = /* @__PURE__ */ new Map(), this.fdCounter = 3, this.workerEntry = null, this.workerThread = null, this.fsName = e, this.useSW = t?.useSW || null, this.versioningStrategy = t?.versioning?.strategy || O.versioning.strategy, this.doImmediateCommit = this.versioningStrategy === "immediate", (async () => await this.initializeWorker())(), d("IDBFS initialized with LightningFS.");
   }
   async initializeWorker() {
-    this.workerEntry = await x.getWorker(this.fsName, this.useSW), this.workerThread = this.workerEntry.thread, await this.workerThread.execute("setFs", {
+    this.workerEntry = await C.getWorker(this.fsName, this.useSW), this.workerThread = this.workerEntry.thread, await this.workerThread.execute("setFs", {
       fsName: this.fsName,
       fsType: "idb",
       gitDir: "/"
     }), d(`Worker initialized for ${this.fsName}`);
   }
   async cleanup() {
-    this.workerEntry && (await x.releaseWorker(this.fsName), this.workerEntry = null, this.workerThread = null);
+    this.workerEntry && (await C.releaseWorker(this.fsName), this.workerEntry = null, this.workerThread = null);
   }
   async fs_fopen(e, t) {
     if (this.workerThread || await this.initializeWorker(), d(`Opening file: ${e} with mode: ${t}`), t.includes("w") || t.includes("a") || t.includes("x")) {
@@ -508,8 +508,8 @@ class K {
       this.workerThread || await this.initializeWorker();
       const i = r.path.split("/").slice(0, -1).join("/");
       if (i) {
-        const a = await this.workerThread.execute("isDirectoryDot", { path: i });
-        if (!a.exists || !a.isDirectory)
+        const n = await this.workerThread.execute("isDirectoryDot", { path: i });
+        if (!n.exists || !n.isDirectory)
           throw new Error(`ENOENT: no such directory, open '${r.path}'`);
       }
       let o = await this.workerThread.execute("readFileDot", { filePath: r.path }).catch(() => "");
@@ -571,7 +571,7 @@ class K {
         path: e
       });
       (s.error || !s || !s?.paths?.[t]) && d(`No note found for ${e}, returning basic stats`);
-      const o = s?.paths?.[t]?.metadata || s, a = {
+      const o = s?.paths?.[t]?.metadata || s, n = {
         // Standard fs.Stats properties
         dev: 0,
         ino: o.inode || o.dentry_id || 0,
@@ -610,7 +610,7 @@ class K {
         getNoteType: () => i,
         getAllPaths: () => s.filepath_metadata ? Object.keys(s.filepath_metadata) : [e]
       };
-      return d(`Retrieved detailed stats for ${e}`, a), a;
+      return d(`Retrieved detailed stats for ${e}`, n), n;
     } catch (t) {
       if ($(`Error getting stats for path ${e}:`, t), t.message.includes("ENOENT"))
         throw t;
@@ -744,14 +744,14 @@ class K {
     return d("Closing all file descriptors."), this.fileDescriptors.clear(), 0;
   }
 }
-const A = new E(y.logging.GitAuth);
-function C(...n) {
-  A.consoleDotLog(...n);
+const ee = await D(), U = new E(ee.logging.GitAuth);
+function M(...a) {
+  U.consoleDotLog(...a);
 }
-function N(...n) {
-  A.consoleDotError(...n);
+function R(...a) {
+  U.consoleDotError(...a);
 }
-class Q {
+class te {
   constructor(e) {
     this.workerThread = e, this.AuthChecked = !1;
   }
@@ -765,9 +765,9 @@ class Q {
     try {
       if (!this.workerThread)
         throw new Error("Worker thread not initialized");
-      return await this.workerThread.execute("setAuthParams", { username: e, password: t }), C("Auth params set successfully"), this.AuthChecked || (this.AuthChecked = !0), C("Auth params verified successfully"), !0;
+      return await this.workerThread.execute("setAuthParams", { username: e, password: t }), M("Auth params set successfully"), this.AuthChecked || (this.AuthChecked = !0), M("Auth params verified successfully"), !0;
     } catch (r) {
-      throw N("Failed to set auth params:", r), r;
+      throw R("Failed to set auth params:", r), r;
     }
   }
   /**
@@ -778,11 +778,11 @@ class Q {
     try {
       if (!this.workerThread)
         throw new Error("Worker thread not initialized");
-      return await this.workerThread.execute("listServerRefs"), C("Auth verification successful"), !0;
+      return await this.workerThread.execute("listServerRefs"), M("Auth verification successful"), !0;
     } catch (e) {
       if (e.toString().includes("401") || e.toString().includes("403"))
-        return C("Auth verification failed - invalid credentials"), !1;
-      throw N("Auth verification error:", e), e;
+        return M("Auth verification failed - invalid credentials"), !1;
+      throw R("Auth verification error:", e), e;
     }
   }
   /**
@@ -792,33 +792,33 @@ class Q {
    */
   async setUserConfig(e, t) {
     try {
-      return await this.workerThread.execute("setConfigs", { name: e, email: t }), C(`User config set, name: ${e}, email: ${t}`), !0;
+      return await this.workerThread.execute("setConfigs", { name: e, email: t }), M(`User config set, name: ${e}, email: ${t}`), !0;
     } catch (r) {
-      throw N(`Failed to set user config: ${r}`), r;
+      throw R(`Failed to set user config: ${r}`), r;
     }
   }
 }
-const O = new E(y.logging.VFSutils);
-function l(...n) {
-  O.consoleDotLog("[ VFSUtils ]", ...n);
+const re = await D(), V = new E(re.logging.VFSutils);
+function l(...a) {
+  V.consoleDotLog("[ VFSUtils ]", ...a);
 }
-function w(...n) {
-  O.consoleDotError("[ VFSUtils ]", ...n);
+function w(...a) {
+  V.consoleDotError("[ VFSUtils ]", ...a);
 }
 l("Loading VFSUtils module");
-class J {
+class ie {
   constructor(e, t, r, i, s = !1) {
     this.fsType = e, this.fsInstance = t, this.fsName = r, this.fetchInfo = i, this.workerEntry = null, this.workerThread = null, this.inodeCounter = 12341, this.fsTable = {}, this.initialized = !1, this.useSW = s, this.auth = null;
   }
   async initialize() {
     if (!this.initialized)
       try {
-        this.workerEntry = await x.getWorker(this.fsName, this.useSW), this.workerThread = this.workerEntry.thread, l("Setting Fs for VFSUtils."), await this.workerThread.execute("setFs", {
+        this.workerEntry = await C.getWorker(this.fsName, this.useSW), this.workerThread = this.workerEntry.thread, l("Setting Fs for VFSUtils."), await this.workerThread.execute("setFs", {
           fsName: this.fsName,
           fsType: this.fsType
         }), l("Fs set."), this.fetchInfo.corsProxy && await this.workerThread.execute("setCorsProxy", {
           corsProxy: this.fetchInfo.corsProxy
-        }), l("workerThread:", this.workerThread), this.auth = new Q(this.workerThread), this.fetchInfo.username && this.fetchInfo.password && await this.setAuthParams(this.fetchInfo.username, this.fetchInfo.password), this.initialized = !0, l(`VFSutils initialized for ${this.fsName} with type ${this.fsType}`);
+        }), l("workerThread:", this.workerThread), this.auth = new te(this.workerThread), (this.fetchInfo.username || this.fetchInfo.password) && await this.setAuthParams(this.fetchInfo.username, this.fetchInfo.password), this.initialized = !0, l(`VFSutils initialized for ${this.fsName} with type ${this.fsType}`);
       } catch (e) {
         throw await this.terminate(), e;
       }
@@ -835,19 +835,33 @@ class J {
         } catch (r) {
           throw w("Some error happend while terminating VFS: ", r), r;
         }
-      return this.workerEntry && (await x.releaseWorker(this.fsName), this.workerEntry = null, this.workerThread = null), this.initialized = !1, !0;
+      return this.workerEntry && (await C.releaseWorker(this.fsName), this.workerEntry = null, this.workerThread = null), this.initialized = !1, !0;
     } catch (r) {
       return w("VFSutils termination error:", r), !1;
+    }
+  }
+  async initRepoLocally() {
+    try {
+      l("Initializing local repository..."), this.initialized || await this.initialize();
+      const e = await this.workerThread.execute("init");
+      if (l("initialized."), !e.success)
+        throw new Error("Local repository initialization failed!");
+      this.fetchInfo.name && this.fetchInfo.email && await this.setUserConfig(this.fetchInfo.name, this.fetchInfo.email), await this.generateFsTable(), l("Repository successfully initialized and indexed");
+    } catch (e) {
+      throw w(`Local repo init failed: ${e}`), await this.terminate(), e;
     }
   }
   async fetchFromGit() {
     try {
       l("Fetching from Git repository..."), this.initialized || await this.initialize(), l("initialized.");
       const { url: e, dir: t = "/" } = this.fetchInfo;
-      l(`Cloning repository from ${e} to ${t}`);
-      const r = await this.workerThread.execute("doCloneAndStuff", { url: e });
-      if (await this.fetchNotes(), !r.success)
-        throw new Error("Fetching from git failed!");
+      if (l(`Cloning repository from ${e} to ${t}`), e === "" || !e)
+        await this.initRepoLocally();
+      else {
+        const r = await this.workerThread.execute("doCloneAndStuff", { url: e });
+        if (await this.fetchNotes(), !r.success)
+          throw new Error("Fetching from git failed!");
+      }
       this.fetchInfo.name && this.fetchInfo.email && await this.setUserConfig(this.fetchInfo.name, this.fetchInfo.email), await this.generateFsTable(), l("Repository successfully cloned and indexed");
     } catch (e) {
       throw w(`Git fetch failed: ${e}`), await this.terminate(), e;
@@ -855,9 +869,7 @@ class J {
   }
   async fetchFromDisk() {
     try {
-      this.initialized || await this.initialize();
-      const { dir: e } = this.fetchInfo;
-      l(`Loading filesystem from disk at ${e}`), await this.generateFsTable(), l("Successfully loaded filesystem from disk");
+      this.initialized || await this.initialize(), l("Loading filesystem from disk"), await this.initRepoLocally(), await this.generateFsTable(), l("Successfully loaded filesystem from disk");
     } catch (e) {
       throw w(`Disk load failed: ${e.message}`), await this.terminate(), e;
     }
@@ -890,13 +902,13 @@ class J {
     return e.forEach((r) => {
       const i = r.path.split("/").filter((o) => o !== "");
       let s = t;
-      i.forEach((o, a) => {
-        const h = a === i.length - 1;
+      i.forEach((o, n) => {
+        const h = n === i.length - 1;
         if (s.children[o]) {
-          const u = s.children[o], f = h && r.type !== "tree" ? "file" : "directory";
-          if (u.type !== f)
+          const f = s.children[o], u = h && r.type !== "tree" ? "file" : "directory";
+          if (f.type !== u)
             throw new Error(
-              `FS conflict: ${r.path} has ${f} where ${u.type} already exists`
+              `FS conflict: ${r.path} has ${u} where ${f.type} already exists`
             );
         } else
           s.children[o] = this.createFsTableEntry(
@@ -918,39 +930,39 @@ class J {
       const s = t.replace(/^\/+|\/+$/g, "");
       this.fsTable["/"] || (this.fsTable["/"] = this.createRootEntry());
       const o = s.split("/");
-      let a = this.fsTable["/"];
+      let n = this.fsTable["/"];
       if (e === "remove" && o.length === 0)
         throw new Error("Cannot remove root directory");
-      for (let u = 0; u < o.length - 1; u++) {
-        const f = o[u];
-        if (!a.children || !a.children[f]) {
+      for (let f = 0; f < o.length - 1; f++) {
+        const u = o[f];
+        if (!n.children || !n.children[u]) {
           if (e === "remove")
-            throw new Error(`Parent path not found: ${o.slice(0, u + 1).join("/")}`);
-          a.children[f] = this.createFsTableEntry(
-            f,
+            throw new Error(`Parent path not found: ${o.slice(0, f + 1).join("/")}`);
+          n.children[u] = this.createFsTableEntry(
+            u,
             "directory",
             0,
-            a.dentry_id
+            n.dentry_id
           );
         }
-        a = a.children[f];
+        n = n.children[u];
       }
       const h = o[o.length - 1];
       switch (e) {
         case "create":
-          a.children || (a.children = {}), a.children[h] && l(`path ${t} already exists, updating its content`), a.children[h] = this.createFsTableEntry(
+          n.children || (n.children = {}), n.children[h] && l(`path ${t} already exists, updating its content`), n.children[h] = this.createFsTableEntry(
             h,
             r,
             i,
-            a.dentry_id
+            n.dentry_id
           );
           break;
         case "remove":
-          if (!a.children || !a.children[h])
+          if (!n.children || !n.children[h])
             return { success: !1, message: `Path not found: ${t}` };
-          if (a.children[h].type === "directory" && Object.keys(a.children[h].children || {}).length > 0)
+          if (n.children[h].type === "directory" && Object.keys(n.children[h].children || {}).length > 0)
             throw new Error(`Cannot remove non-empty directory: ${t}`);
-          delete a.children[h];
+          delete n.children[h];
           break;
         default:
           throw new Error(`Invalid action: ${e}`);
@@ -1019,7 +1031,7 @@ class J {
   async getSyncStatus(e = null, t = "main") {
     try {
       l("Starting sync status check...");
-      const r = e || this.fetchInfo?.url;
+      const r = e || this?.fetchInfo?.url;
       l("Getting local head commit...");
       const i = await this.workerThread.execute("getLastLocalCommit", { ref: t });
       l("Local head commit:", i), l("Getting remote head commit...");
@@ -1041,19 +1053,19 @@ class J {
           remoteHead: o
         };
       l("Getting commit histories...");
-      const [a, h] = await Promise.all([
+      const [n, h] = await Promise.all([
         await this.getLocalCommitHistory(10),
         await this.getRemoteCommitHistory(10)
       ]);
-      l("Local commits (10 most recent):", a), l("Remote commits (10 most recent):", h);
-      const u = this.findFirstCommonCommit(a, h);
-      l("Common commit found:", u);
-      let f;
-      return u ? u === o ? (f = "local-ahead", l("Local is ahead of remote")) : u === i ? (f = "remote-ahead", l("Remote is ahead of local")) : (f = "diverged", l("Branches have diverged")) : (f = "diverged", l("No common commit found - branches have diverged")), {
-        status: f,
+      l("Local commits (10 most recent):", n), l("Remote commits (10 most recent):", h);
+      const f = this.findFirstCommonCommit(n, h);
+      l("Common commit found:", f);
+      let u;
+      return f ? f === o ? (u = "local-ahead", l("Local is ahead of remote")) : f === i ? (u = "remote-ahead", l("Remote is ahead of local")) : (u = "diverged", l("Branches have diverged")) : (u = "diverged", l("No common commit found - branches have diverged")), {
+        status: u,
         localHead: i,
         remoteHead: o,
-        commonAncestor: u
+        commonAncestor: f
       };
     } catch (r) {
       return w("getSyncStatus failed:", r), {
@@ -1102,37 +1114,37 @@ class J {
   /**
    * Optimized sync flow that minimizes remote operations
    */
-  async autoSyncFlow(e) {
+  async autoSyncFlow(e, t) {
     try {
       l("this.fetchInfo", this.fetchInfo);
-      const { status: t, localHead: r, remoteHead: i, commonAncestor: s } = await this.getSyncStatus();
-      switch (l("Sync status:", t), t) {
+      const { status: r, localHead: i, remoteHead: s, commonAncestor: o } = await this.getSyncStatus(t);
+      switch (l("Sync status:", r), r) {
         case "up-to-date":
           return { synced: !0 };
         case "local-ahead":
-          return await this.handleLocalAhead(r, i, e);
+          return await this.handleLocalAhead(i, s, e, t);
         case "remote-ahead":
-          return await this.handleRemoteAhead(r, i, e);
+          return await this.handleRemoteAhead(i, s, e, t);
         case "diverged":
-          return await this.handleDiverged(r, i, s, e);
+          return await this.handleDiverged(i, s, o, e, t);
         case "remote-branch-not-found":
           return w("Remote branch not found"), { synced: !1, error: "Remote branch not found" };
         default:
-          throw new Error(`Unknown sync status: ${t}`);
+          throw new Error(`Unknown sync status: ${r}`);
       }
-    } catch (t) {
-      throw w("autoSyncFlow failed:", t), t;
+    } catch (r) {
+      throw w("autoSyncFlow failed:", r), r;
     }
   }
   /**
    * Handle case where remote is ahead of local (need to pull changes)
    */
-  async handleRemoteAhead(e, t, r) {
+  async handleRemoteAhead(e, t, r, i) {
     try {
       l(`Handling remote-ahead scenario (local: ${e}, remote: ${t})`);
-      const i = r || "theirs";
+      const s = r || "theirs";
       if (l("Attempting fast-forward merge..."), (await this.workerThread.execute("fastForward", {
-        url: this.fetchInfo.url,
+        url: i,
         ref: "main"
       })).success)
         return l("Fast-forward successful"), await this.generateFsTable(), {
@@ -1142,68 +1154,68 @@ class J {
           newHead: t
         };
       l("Fast-forward failed, attempting full pull...");
-      const o = await this.workerThread.execute("doFetch", {
-        url: this.fetchInfo.url,
+      const n = await this.workerThread.execute("doFetch", {
+        url: i,
         ref: "main"
       });
       l("Fetching notes from remote..."), await this.workerThread.execute("doFetch", {
-        url: this.fetchInfo.url,
+        url: i,
         remote: "origin",
         ref: "refs/notes/commits",
         tags: !0,
         singleBranch: !0
       });
-      const a = await this.workerThread.execute("merge", {
+      const h = await this.workerThread.execute("merge", {
         ours: "main",
         theirs: "origin/main",
-        strategy: i
+        strategy: s
       });
       if (l("Fetching notes from remote..."), await this.workerThread.execute("doFetch", {
-        url: this.fetchInfo.url,
+        url: i,
         remote: "origin",
         ref: "refs/notes/commits",
         tags: !0,
         singleBranch: !0
-      }), !o.success)
-        throw new Error("Pull failed: " + (o.error || "Unknown error"));
+      }), !n.success)
+        throw new Error("Pull failed: " + (n.error || "Unknown error"));
       l("Pull successful"), await this.generateFsTable();
-      const h = await this.workerThread.execute("getLastLocalCommit", { ref: "main" });
-      return h !== t && l(`Warning: Local head (${h}) doesn't match remote head (${t}) after pull`), {
+      const f = await this.workerThread.execute("getLastLocalCommit", { ref: "main" });
+      return f !== t && l(`Warning: Local head (${f}) doesn't match remote head (${t}) after pull`), {
         synced: !0,
         strategy: "pull-with-merge",
         oldHead: e,
-        newHead: h
+        newHead: f
       };
-    } catch (i) {
-      w("handleRemoteAhead failed:", i);
+    } catch (s) {
+      w("handleRemoteAhead failed:", s);
       try {
         await this.workerThread.execute("resetToCommit", {
           oid: e,
           hard: !0
         });
-      } catch (s) {
-        w("Failed to reset after error:", s);
+      } catch (o) {
+        w("Failed to reset after error:", o);
       }
-      throw i;
+      throw s;
     }
   }
   /**
    * Handle case where local is ahead of remote (need to push changes)
    */
-  async handleLocalAhead(e, t) {
+  async handleLocalAhead(e, t, r, i) {
     try {
       l(`Handling local-ahead scenario (local: ${e}, remote: ${t})`), await this.setAuthParams(this.fetchInfo.username, this.fetchInfo.password);
-      const r = await this.workerThread.execute("push", {
-        url: this.fetchInfo.url,
+      const s = await this.workerThread.execute("push", {
+        url: i,
         ref: "refs/notes/commits",
         remoteRef: "refs/notes/commits",
         force: !1
       });
       if (l("Attempting push..."), (await this.workerThread.execute("push", {
-        url: this.fetchInfo.url,
+        url: i,
         ref: "main",
         force: !1
-      })).success || r.success)
+      })).success || s.success)
         return l("Push successful"), {
           synced: !0,
           strategy: "push",
@@ -1211,52 +1223,52 @@ class J {
           newRemoteHead: e
         };
       l("Push failed, rechecking sync status...");
-      const s = await this.getSyncStatus();
-      if (s.status === "up-to-date")
+      const n = await this.getSyncStatus(i);
+      if (n.status === "up-to-date")
         return l("Status is now up-to-date after push failure"), { synced: !0, strategy: "concurrent-update" };
-      if (s.status === "remote-ahead")
-        return l("Remote moved ahead during push attempt"), this.handleRemoteAhead(e, s.remoteHead);
-      if (s.status === "diverged")
-        return l("Branches diverged during push attempt"), this.handleDiverged(e, s.remoteHead, s.commonAncestor);
-      throw new Error(`Unexpected status after push failure: ${s.status}`);
-    } catch (r) {
-      throw w("handleLocalAhead failed:", r), r;
+      if (n.status === "remote-ahead")
+        return l("Remote moved ahead during push attempt"), this.handleRemoteAhead(e, n.remoteHead);
+      if (n.status === "diverged")
+        return l("Branches diverged during push attempt"), this.handleDiverged(e, n.remoteHead, n.commonAncestor, r, i);
+      throw new Error(`Unexpected status after push failure: ${n.status}`);
+    } catch (s) {
+      throw w("handleLocalAhead failed:", s), s;
     }
   }
   /**
    * Handle case where branches have diverged
    */
-  async handleDiverged(e, t, r, i) {
+  async handleDiverged(e, t, r, i, s) {
     try {
-      const s = i || "theirs";
+      const o = i || "theirs";
       l("Using merge workflow"), l("Pulling with merge...");
-      const o = await this.workerThread.execute("doFetch", {
-        url: this.fetchInfo.url,
+      const n = await this.workerThread.execute("doFetch", {
+        url: s,
         ref: "main"
       });
       l("Fetching notes from remote..."), await this.workerThread.execute("doFetch", {
-        url: this.fetchInfo.url,
+        url: s,
         remote: "origin",
         ref: "refs/notes/commits",
         tags: !0,
         singleBranch: !0
       });
-      const a = await this.workerThread.execute("merge", {
+      const h = await this.workerThread.execute("merge", {
         ours: "main",
         theirs: "origin/main",
-        strategy: s
+        strategy: o
       });
-      if (!o.success)
-        throw new Error("Pull failed: " + (o.error || "Unknown error"));
-      const h = await this.workerThread.execute("push", {
-        url: this.fetchInfo.url,
+      if (!n.success)
+        throw new Error("Pull failed: " + (n.error || "Unknown error"));
+      const f = await this.workerThread.execute("push", {
+        url: s,
         ref: "refs/notes/commits",
         remoteRef: "refs/notes/commits",
         force: !1
       });
       l("Pushing merged changes..."), await this.setAuthParams(this.fetchInfo.username, this.fetchInfo.password);
       const u = await this.workerThread.execute("push", {
-        url: this.fetchInfo.url,
+        url: s,
         ref: "main",
         force: !1
       });
@@ -1267,17 +1279,17 @@ class J {
         newLocalHead: await this.workerThread.execute("getLastLocalCommit", { ref: "main" }),
         remoteHead: t
       };
-    } catch (s) {
-      w("handleDiverged failed:", s);
+    } catch (o) {
+      w("handleDiverged failed:", o);
       try {
         await this.workerThread.execute("resetToCommit", {
           oid: e,
           hard: !0
         });
-      } catch (o) {
-        w("Failed to reset after error:", o);
+      } catch (n) {
+        w("Failed to reset after error:", n);
       }
-      throw s;
+      throw o;
     }
   }
   // ------------------------
@@ -1348,7 +1360,7 @@ class J {
     }
   }
 }
-class X {
+class se {
   constructor(e = "VFS_Mounts") {
     this.dbName = e, this.localStorageWarningShown = !1, this.forceLocalStorage = !1;
   }
@@ -1390,10 +1402,10 @@ class X {
       s.onerror = () => r(null), s.onsuccess = () => {
         const o = s.result;
         try {
-          const u = o.transaction("mounts", "readonly").objectStore("mounts").get(e);
-          u.onsuccess = () => r(u.result || null), u.onerror = () => r(null);
-        } catch (a) {
-          console.error("Transaction error:", a), r(null);
+          const f = o.transaction("mounts", "readonly").objectStore("mounts").get(e);
+          f.onsuccess = () => r(f.result || null), f.onerror = () => r(null);
+        } catch (n) {
+          console.error("Transaction error:", n), r(null);
         } finally {
           o.close();
         }
@@ -1418,15 +1430,15 @@ class X {
           e({});
           return;
         }
-        const a = i.transaction("mounts", "readonly").objectStore("mounts").getAllKeys(), h = {};
-        a.onsuccess = async () => {
-          const u = a.result;
-          for (const f of u) {
-            const p = await this.get(f);
-            p && (h[f] = p);
+        const n = i.transaction("mounts", "readonly").objectStore("mounts").getAllKeys(), h = {};
+        n.onsuccess = async () => {
+          const f = n.result;
+          for (const u of f) {
+            const y = await this.get(u);
+            y && (h[u] = y);
           }
           e(h);
-        }, a.onerror = () => e({});
+        }, n.onerror = () => e({});
       };
     });
   }
@@ -1514,11 +1526,11 @@ class X {
     return new Promise((r, i) => {
       const s = indexedDB.open(this.dbName, 1);
       s.onerror = () => r(!1), s.onsuccess = () => {
-        const a = s.result.transaction("mounts", "readwrite");
-        a.objectStore("mounts").put(t, e), a.oncomplete = () => r(!0), a.onerror = () => r(!1);
+        const n = s.result.transaction("mounts", "readwrite");
+        n.objectStore("mounts").put(t, e), n.oncomplete = () => r(!0), n.onerror = () => r(!1);
       }, s.onupgradeneeded = (o) => {
-        const a = o.target.result;
-        a.objectStoreNames.contains("mounts") || a.createObjectStore("mounts");
+        const n = o.target.result;
+        n.objectStoreNames.contains("mounts") || n.createObjectStore("mounts");
       };
     });
   }
@@ -1532,43 +1544,43 @@ class X {
     });
   }
 }
-const Y = new E(y.logging.supportChecker);
-function b(...n) {
-  Y.consoleDotLog(...n);
+const oe = await D(), ne = new E(oe.logging.supportChecker);
+function x(...a) {
+  ne.consoleDotLog(...a);
 }
-async function Z() {
+async function ae() {
   try {
-    return window.indexedDB ? await new Promise((n) => {
+    return window.indexedDB ? await new Promise((a) => {
       const e = "testIDBSupport", t = indexedDB.open(e);
       t.onerror = () => {
-        b("IndexedDB not available"), n(!1);
+        x("IndexedDB not available"), a(!1);
       }, t.onsuccess = (r) => {
         r.target.result.close();
         const s = indexedDB.deleteDatabase(e);
         s.onerror = () => {
-          b("Failed to delete test database"), n(!0);
+          x("Failed to delete test database"), a(!0);
         }, s.onsuccess = () => {
-          b("IndexedDB test successful"), n(!0);
+          x("IndexedDB test successful"), a(!0);
         };
       }, t.onblocked = () => {
-        b("IndexedDB request blocked"), n(!1);
+        x("IndexedDB request blocked"), a(!1);
       };
-    }) : (b("IndexedDB not supported in this browser"), !1);
-  } catch (n) {
-    return b("IndexedDB test failed:", n), !1;
+    }) : (x("IndexedDB not supported in this browser"), !1);
+  } catch (a) {
+    return x("IndexedDB test failed:", a), !1;
   }
 }
-const B = new E(y.logging.vfs);
-function c(...n) {
-  B.consoleDotLog("[VFS] ", ...n);
+const b = await D(), j = new E(b.logging.vfs);
+function c(...a) {
+  j.consoleDotLog("[VFS] ", ...a);
 }
-function m(...n) {
-  B.consoleDotError("[VFS] ", ...n);
+function m(...a) {
+  j.consoleDotError("[VFS] ", ...a);
 }
-class ee {
+class ce {
   // Initialization and Core Setup
   constructor(e = "VFS_Mounts") {
-    this.mounts = /* @__PURE__ */ Object.create(null), this.initializedMounts = /* @__PURE__ */ new Set(), this.vfsUtilsInstances = /* @__PURE__ */ new Map(), this.storageUtils = new X(e), this.currentMountPath = "", this.idbSupported = null, (async () => {
+    this.mounts = /* @__PURE__ */ Object.create(null), this.initializedMounts = /* @__PURE__ */ new Set(), this.vfsUtilsInstances = /* @__PURE__ */ new Map(), this.storageUtils = new se(e), this.currentMountPath = "", this.idbSupported = null, (async () => {
       try {
         await this.retrieveAndMountFromFsTable();
       } catch (t) {
@@ -1599,7 +1611,7 @@ class ee {
   }
   // Utility functions for versioning and merging
   getVersioningConfig(e = {}) {
-    const t = e.versioning || y.versioning || {};
+    const t = e.versioning || b.versioning || {};
     return {
       strategy: t.strategy,
       interval: t.interval,
@@ -1607,10 +1619,11 @@ class ee {
     };
   }
   getMergingConfig(e = {}) {
-    const t = e.merging || y.merging || {};
+    const t = e.merging || b.merging || {};
     return {
-      strategy: t.strategy || "none",
-      conflictResolution: t.conflictResolution || "timestamp"
+      ...t,
+      strategy: t.strategy || "immediate",
+      onConflictStrategy: t.onConflictStrategy || "local"
     };
   }
   // Storage and Support Checking
@@ -1618,7 +1631,7 @@ class ee {
     if (c("Checking IndexedDB support..."), this.idbSupported !== null)
       return this.idbSupported;
     try {
-      return await Z(), c("IndexedDB is supported"), this.idbSupported = !0, !0;
+      return await ae(), c("IndexedDB is supported"), this.idbSupported = !0, !0;
     } catch (e) {
       return m("IndexedDB not supported:", e), this.idbSupported = !1, !1;
     }
@@ -1653,10 +1666,10 @@ class ee {
       let s;
       switch (e) {
         case "memory":
-          c("Creating MemoryFS instance"), s = new z(t, { ...r, useSW: !1 });
+          c("Creating MemoryFS instance"), s = new P(t, { ...r, useSW: !1 });
           break;
         case "idb":
-          c("Creating IDBFs instance"), s = new K(t, { ...r, useSW: i });
+          c("Creating IDBFs instance"), s = new Z(t, { ...r, useSW: i });
           break;
         default:
           const o = `Unknown FS type: ${e}`;
@@ -1700,14 +1713,14 @@ class ee {
   async mount(e, t, r, i, s = {}) {
     c(`Mounting filesystem - path: ${e}, type: ${t}, name: ${r}, method: ${i}, options: ${JSON.stringify(s)}`);
     try {
-      const o = s.fetchInfo || {}, a = this.getVersioningConfig(s), h = this.getMergingConfig(s), f = `${e.endsWith("/") ? e : `${e}/`}${r}`;
-      if (c(`Normalized mount path: ${f}`), this.mounts[f]) {
-        const D = `Path ${f} is already mounted`;
-        throw m(D), new Error(D);
+      const o = s.fetchInfo || {}, n = this.getVersioningConfig(s), h = this.getMergingConfig(s), u = `${e.endsWith("/") ? e : `${e}/`}${r}`;
+      if (c(`Normalized mount path: ${u}`), this.mounts[u]) {
+        const k = `Path ${u} is already mounted`;
+        throw m(k), new Error(k);
       }
-      this.currentMountPath = f, c(`Checking storage for existing mount at ${f}`);
-      const p = await this.loadMountFromStorage(f);
-      return p ? (c(`Found stored mount, initializing existing mount at ${f}`), this.initializeStoredMount(f, p, i, o, { versioning: a, merging: h })) : (c(`No stored mount found, creating new mount at ${f}`), this.createNewMount(f, t, r, i, o, a, h));
+      this.currentMountPath = u, c(`Checking storage for existing mount at ${u}`);
+      const y = await this.loadMountFromStorage(u);
+      return y ? (c(`Found stored mount, initializing existing mount at ${u}`), this.initializeStoredMount(u, y, i, o, { versioning: n, merging: h })) : (c(`No stored mount found, creating new mount at ${u}`), this.createNewMount(u, t, r, i, o, n, h));
     } catch (o) {
       throw m("Mount operation failed:", o), o;
     }
@@ -1726,11 +1739,11 @@ class ee {
         if (i) {
           c(`Processing mount at ${r} from fsTable`);
           try {
-            const s = r.lastIndexOf("/"), o = r.substring(0, s), a = r.substring(s + 1);
+            const s = r.lastIndexOf("/"), o = r.substring(0, s), n = r.substring(s + 1);
             await this.mount(
               o,
               i.fsType,
-              a,
+              n,
               i.fetchMethod,
               {
                 fetchInfo: i.fetchInfo,
@@ -1767,11 +1780,11 @@ class ee {
         e,
         t.fetchInfo || i
       );
-      const a = this.getPlatformInfo(), h = t.accessLog || [];
+      const n = this.getPlatformInfo(), h = t.accessLog || [];
       return h.push({
         time: (/* @__PURE__ */ new Date()).toISOString(),
         action: "remount",
-        environment: a
+        environment: n
       }), this.mounts[e] = {
         ...t,
         fsInstance: o,
@@ -1782,7 +1795,7 @@ class ee {
         },
         versioning: this.getVersioningConfig(t),
         merging: this.getMergingConfig(t),
-        environment: a,
+        environment: n,
         // Update environment info
         modified: (/* @__PURE__ */ new Date()).toISOString(),
         accessLog: h
@@ -1791,40 +1804,40 @@ class ee {
       throw m(`Failed to initialize stored mount at ${e}:`, o), o;
     }
   }
-  async createNewMount(e, t, r, i, s, o = {}, a = {}) {
+  async createNewMount(e, t, r, i, s, o = {}, n = {}) {
     c(`Creating new mount at ${e}`);
     try {
       c(`Creating new FS instance (type: ${t})`);
-      const h = await this.createFSInstance(t, e, { versioning: o, merging: a });
+      const h = await this.createFSInstance(t, e, { versioning: o, merging: n });
       c(`Fetching data for new mount using method: ${i}`), await this.fetchFS(i, t, h, e, s);
-      const u = this.vfsUtilsInstances.get(e);
-      if (!u)
+      const f = this.vfsUtilsInstances.get(e);
+      if (!f)
         throw new Error("VFSutils instance not found for mount");
       c("Generating filesystem table");
-      const f = await u.generateFsTable(), p = await u.getFsTableSize(f);
-      c(`Filesystem table generated, size: ${p}`);
-      const D = this.getPlatformInfo(), T = {
+      const u = await f.generateFsTable(), y = await f.getFsTableSize(u);
+      c(`Filesystem table generated, size: ${y}`);
+      const k = this.getPlatformInfo(), T = {
         fsInstance: h,
-        fsType: h instanceof z ? "memory" : t,
+        fsType: h instanceof P ? "memory" : t,
         fsName: r,
-        fsTable: f,
+        fsTable: u,
         fetchMethod: i,
         fetchInfo: {
           ...s,
           time: (/* @__PURE__ */ new Date()).toISOString(),
-          size: p,
+          size: y,
           lastFetched: (/* @__PURE__ */ new Date()).toISOString()
         },
         versioning: this.getVersioningConfig({ versioning: o }),
-        merging: this.getMergingConfig({ merging: a }),
-        environment: D,
+        merging: this.getMergingConfig({ merging: n }),
+        environment: k,
         // Add environment info
         created: (/* @__PURE__ */ new Date()).toISOString(),
         modified: (/* @__PURE__ */ new Date()).toISOString(),
         accessLog: [{
           time: (/* @__PURE__ */ new Date()).toISOString(),
           action: "mount",
-          environment: D
+          environment: k
         }]
       };
       return this.mounts[e] = T, c(`Persisting mount data for ${e}`), await this.persistMountData(e, T), this.initializedMounts.add(e), c(`Successfully mounted new filesystem at ${e}`), T;
@@ -1874,20 +1887,20 @@ class ee {
     c(`Fetching filesystem data - method: ${e}, type: ${t}, name: ${i}`);
     try {
       this.vfsUtilsInstances.has(this.currentMountPath) && (c("Terminating existing VFSutils instance for this mount"), await this.vfsUtilsInstances.get(this.currentMountPath).terminate(), this.vfsUtilsInstances.delete(this.currentMountPath)), c("Creating new VFSutils instance for mount:", this.currentMountPath);
-      const a = new J(t, r, i, s, o);
-      this.vfsUtilsInstances.set(this.currentMountPath, a);
-      const u = {
-        git: () => a.fetchFromGit(),
-        disk: () => a.fetchFromDisk(),
-        googleDrive: () => a.fetchFromGoogleDrive()
+      const n = new ie(t, r, i, s, o);
+      this.vfsUtilsInstances.set(this.currentMountPath, n);
+      const f = {
+        git: () => n.fetchFromGit(),
+        disk: () => n.fetchFromDisk(),
+        googleDrive: () => n.fetchFromGoogleDrive()
       }[e];
-      if (!u) {
-        const f = `Unknown fetch method: ${e}`;
-        throw m(f), new Error(f);
+      if (!f) {
+        const u = `Unknown fetch method: ${e}`;
+        throw m(u), new Error(u);
       }
-      c(`Executing fetch strategy for ${e}`), await u(), this.mounts[this.currentMountPath] && (this.mounts[this.currentMountPath].fetchInfo.lastFetched = (/* @__PURE__ */ new Date()).toISOString(), this.mounts[this.currentMountPath].modified = (/* @__PURE__ */ new Date()).toISOString(), await this.persistMountData(this.currentMountPath, this.mounts[this.currentMountPath])), c(`Successfully fetched data using ${e} method`);
-    } catch (a) {
-      throw m(`Fetch operation failed (method: ${e}):`, a), this.vfsUtilsInstances.has(this.currentMountPath) && (c("Cleaning up VFSutils after fetch failure"), await this.vfsUtilsInstances.get(this.currentMountPath).terminate(i, t), this.vfsUtilsInstances.delete(this.currentMountPath)), a;
+      c(`Executing fetch strategy for ${e}`), await f(), this.mounts[this.currentMountPath] && (this.mounts[this.currentMountPath].fetchInfo.lastFetched = (/* @__PURE__ */ new Date()).toISOString(), this.mounts[this.currentMountPath].modified = (/* @__PURE__ */ new Date()).toISOString(), await this.persistMountData(this.currentMountPath, this.mounts[this.currentMountPath])), c(`Successfully fetched data using ${e} method`);
+    } catch (n) {
+      throw m(`Fetch operation failed (method: ${e}):`, n), this.vfsUtilsInstances.has(this.currentMountPath) && (c("Cleaning up VFSutils after fetch failure"), await this.vfsUtilsInstances.get(this.currentMountPath).terminate(i, t), this.vfsUtilsInstances.delete(this.currentMountPath)), n;
     }
   }
   async resolveFS(e) {
@@ -1902,14 +1915,14 @@ class ee {
             {
               fs: this.mounts[r],
               relativePath: i,
-              versioning: this.mounts[r].versioning || y.versioning,
-              merging: this.mounts[r].merging || y.merging
+              versioning: this.mounts[r].versioning || b.versioning,
+              merging: this.mounts[r].merging || b.merging
             }
           ), {
             fs: this.mounts[r],
             relativePath: i,
-            versioning: this.mounts[r].versioning || y.versioning,
-            merging: this.mounts[r].merging || y.merging
+            versioning: this.mounts[r].versioning || b.versioning,
+            merging: this.mounts[r].merging || b.merging
           };
         }
       const t = `No filesystem mounted for path: ${e}`;
@@ -1979,11 +1992,12 @@ class ee {
   //--------------------
   async merger(e) {
     c("Starting merge operation"), await this.validateVFSutils();
+    const t = this.mounts[this.currentMountPath]?.merging?.syncUrl;
     try {
-      const r = await this.vfsUtilsInstances.get(this.currentMountPath).autoSyncFlow(e);
-      return c("Merge operation completed successfully:", r), r;
-    } catch (t) {
-      throw m("Merge operation failed:", t), t;
+      const i = await this.vfsUtilsInstances.get(this.currentMountPath).autoSyncFlow(e, t);
+      return c("Merge operation completed successfully:", i), i;
+    } catch (r) {
+      throw m("Merge operation failed:", r), r;
     }
   }
   //-------------------
@@ -2005,19 +2019,19 @@ class ee {
     return r = { ...r, fetchInfo: { ...r.fetchInfo, ...e } }, this.persistMountData(this.currentMountPath, r), e;
   }
 }
-const L = new E(y.logging.kfs);
-function M(...n) {
-  L.consoleDotLog("[Versioning]", ...n);
+const G = await D(), H = new E(G.logging.kfs);
+function _(...a) {
+  H.consoleDotLog("[Versioning]", ...a);
 }
-function te(...n) {
-  L.consoleDotError("[Versioning]", ...n);
+function le(...a) {
+  H.consoleDotError("[Versioning]", ...a);
 }
-class re {
+class he {
   constructor(e) {
     this.vfs = e, this.clockIntervalID = null, this.operationQueueCount = 0, this.config = this._getDefaultVersioningConfig();
   }
   _getDefaultVersioningConfig() {
-    const e = y.versioning || {};
+    const e = G.versioning || {};
     return {
       strategy: e.strategy,
       interval: e.interval,
@@ -2033,7 +2047,7 @@ class re {
     };
   }
   async setup(e = {}) {
-    this.config = await this._getVersioningConfig(e), M("Versioning configuration:", this.config), this.config.strategy === "clock" ? this._startClockVersioning() : this.clearClock();
+    this.config = await this._getVersioningConfig(e), _("Versioning configuration:", this.config), this.config.strategy === "clock" ? this._startClockVersioning() : this.clearClock();
   }
   clearClock() {
     this.clockIntervalID && (clearInterval(this.clockIntervalID), this.clockIntervalID = null);
@@ -2041,12 +2055,12 @@ class re {
   _startClockVersioning() {
     this.clearClock();
     const e = (this.config.interval || 10) * 1e3;
-    M("Starting clock-based versioning with interval:", e, "ms"), this.clockIntervalID = setInterval(async () => {
-      M("Clock-based auto commit triggered");
+    _("Starting clock-based versioning with interval:", e, "ms"), this.clockIntervalID = setInterval(async () => {
+      _("Clock-based auto commit triggered");
       try {
         await this.vfs.versioner("Clock-based auto commit");
       } catch (t) {
-        te("Error in clock-based versioning:", t);
+        le("Error in clock-based versioning:", t);
       }
     }, e);
   }
@@ -2055,23 +2069,24 @@ class re {
     if (t.strategy !== "immediate" && t.strategy === "batch") {
       this.operationQueueCount++;
       const r = t.number || 5;
-      M(`Batch operation count: ${this.operationQueueCount}/${r}`), this.operationQueueCount >= r && (this.operationQueueCount = 0, await this.vfs.versioner(`Batch commit after ${r} operations`));
+      _(`Batch operation count: ${this.operationQueueCount}/${r}`), this.operationQueueCount >= r && (this.operationQueueCount = 0, await this.vfs.versioner(`Batch commit after ${r} operations`));
     }
   }
   async getConfig() {
     return this.config;
   }
 }
-new E(y.logging.kfs);
-class ie {
+const N = await D();
+new E(N.logging.kfs);
+class fe {
   constructor(e) {
     this.vfs = e, this.clockIntervalID = null, this.config = this._getDefaultMergingConfig();
   }
   _getDefaultMergingConfig() {
     return {
-      strategy: y.merging?.strategy || null,
-      interval: y.merging?.interval || 10,
-      number: y.merging?.number || 5
+      strategy: N.merging?.strategy || null,
+      interval: N.merging?.interval || 10,
+      number: N.merging?.number || 5
     };
   }
   async setup(e = {}) {
@@ -2098,16 +2113,16 @@ class ie {
     return this.config;
   }
 }
-const se = await V(), U = new E(se.logging.kfs);
-function S(...n) {
-  U.consoleDotLog("[KFS]", ...n);
+const ue = await D(), q = new E(ue.logging.kfs);
+function S(...a) {
+  q.consoleDotLog("[KFS]", ...a);
 }
-function F(...n) {
-  U.consoleDotError("[KFS]", ...n);
+function F(...a) {
+  q.consoleDotError("[KFS]", ...a);
 }
-class ae {
+class me {
   constructor() {
-    this.vfs = new ee(), this.fsInstance = null, this.versioningManager = new re(this.vfs), this.mergingManager = new ie(this.vfs), this.commitCount = 0, this.mountPaths = null, this.mergingConfig = null, (async () => {
+    this.vfs = new ce(), this.fsInstance = null, this.versioningManager = new he(this.vfs), this.mergingManager = new fe(this.vfs), this.commitCount = 0, this.mountPaths = null, this.mergingConfig = null, (async () => {
       try {
         await this.init();
       } catch (e) {
@@ -2130,12 +2145,13 @@ class ae {
   async _handleCommit(e) {
     await this.versioningManager.getConfig(), this.mergingConfig = await this.mergingManager.getConfig();
     const t = { remote: "theirs", local: "ours", combine: "combine" }, r = this.mergingConfig?.onConflictStrategy || "remote", i = t[r] || "remote";
-    await this.vfs.versioner(e), this.commitCount++, this.mergingConfig.strategy === "immediate" && await this.vfs.merger(i);
+    await this.vfs.versioner(e), this.commitCount++, this.mergingConfig?.strategy === "immediate" && await this.vfs.merger(i);
   }
   async merge() {
     try {
+      S("Merging...", mountPaths);
       const e = { remote: "theirs", local: "ours", combine: "combine" }, t = this.mergingConfig?.onConflictStrategy || "remote", r = e[t] || "remote";
-      S("Merging..."), await this.vfs.merger(r), S("Merge completed successfully.");
+      S("Merging...", mountPaths), await this.vfs.merger(r), S("Merge completed successfully.");
     } catch (e) {
       throw F("Merge failed:", e), new Error(`Failed to merge: ${e.message}`);
     }
@@ -2148,14 +2164,14 @@ class ae {
       this._setupVersioningAndMerging(s), e = this._normalizePath(e);
       const o = await this.versioningManager.getConfig();
       this.mergingConfig = await this.mergingManager.getConfig();
-      const a = await this.vfs.mount(e, t, r, i, {
+      const n = await this.vfs.mount(e, t, r, i, {
         ...s,
         versioning: o,
         merging: this.mergingConfig
       });
-      this.fsInstance = a.fsInstance;
+      this.mergingConfig = n.merging, this.fsInstance = n.fsInstance;
       const h = await this.read(`${e}/${r}`);
-      return this.mountPaths = await this.vfs.getMountPaths(), S("Mount successful, root:", h), a;
+      return this.mountPaths = await this.vfs.getMountPaths(), S("Mount successful, root:", h), n;
     } catch (o) {
       throw F(`Failed to mount filesystem at ${e}:`, o), new Error(`Failed to mount filesystem: ${o.message}`);
     }
@@ -2201,25 +2217,25 @@ class ae {
         throw new Error(`Invalid mode: ${i}. Must be 'a' (append) or 'w' (write)`);
       if (e = this._normalizePath(e), this.mountPaths.includes(e))
         throw new Error(`Cannot write directly to mount path (${e}). Use mount() instead.`);
-      const { fs: s, relativePath: o, versioning: a } = await this.vfs.resolveFS(e);
+      const { fs: s, relativePath: o, versioning: n } = await this.vfs.resolveFS(e);
       if (t === "file") {
         await this._ensurePathExists(s, o);
-        let h = r, u = `Created file at ${e}`;
+        let h = r, f = `Created file at ${e}`;
         if (i === "a")
           try {
-            const D = await s.fsInstance.fs_fopen(o, "r"), T = await s.fsInstance.fs_fread(D, 1024 * 1024);
-            await s.fsInstance.fs_fclose(D), h = T + r, u = `Appended to file at ${e}`;
+            const k = await s.fsInstance.fs_fopen(o, "r"), T = await s.fsInstance.fs_fread(k, 1024 * 1024);
+            await s.fsInstance.fs_fclose(k), h = T + r, f = `Appended to file at ${e}`;
           } catch {
-            u = `Created file at ${e}`;
+            f = `Created file at ${e}`;
           }
-        const f = await s.fsInstance.fs_fopen(o, "w");
-        if (await s.fsInstance.fs_fwrite(f, h) === -1)
+        const u = await s.fsInstance.fs_fopen(o, "w");
+        if (await s.fsInstance.fs_fwrite(u, h) === -1)
           throw new Error("Failed to write to file");
-        await s.fsInstance.fs_fclose(f), await this.vfs.writeToFsTable(o, t, h.length), a?.strategy === "immediate" ? await this._handleCommit(u) : await this.versioningManager.maybeTriggerVersioning(a);
+        await s.fsInstance.fs_fclose(u), await this.vfs.writeToFsTable(o, t, h.length), n?.strategy === "immediate" ? await this._handleCommit(f) : await this.versioningManager.maybeTriggerVersioning(n);
       } else if (t === "dir")
         if (i === "a")
           try {
-            await s.fsInstance.fs_mkdir(o), await this.vfs.writeToFsTable(o, t, 0), a?.strategy === "immediate" && await this._handleCommit(`Created directory at ${e}`);
+            await s.fsInstance.fs_mkdir(o), await this.vfs.writeToFsTable(o, t, 0), n?.strategy === "immediate" && await this._handleCommit(`Created directory at ${e}`);
           } catch (h) {
             if (!h.message.includes("exists")) throw h;
           }
@@ -2228,7 +2244,7 @@ class ae {
             await (await s.fsInstance.fs_stat(o)).isDirectory() ? await s.fsInstance.fs_rmdir(o) : await s.fsInstance.fs_remove(o);
           } catch {
           }
-          await s.fsInstance.fs_mkdir(o), await this.vfs.writeToFsTable(o, t, 0), a?.strategy === "immediate" && await this._handleCommit(`Created directory at ${e}`);
+          await s.fsInstance.fs_mkdir(o), await this.vfs.writeToFsTable(o, t, 0), n?.strategy === "immediate" && await this._handleCommit(`Created directory at ${e}`);
         }
       return { success: !0 };
     } catch (s) {
@@ -2274,8 +2290,8 @@ class ae {
       s = s ? `${s}/${o}` : `/${o}`;
       try {
         await e.fsInstance.fs_mkdir(s), await this.vfs.writeToFsTable(s, "dir");
-      } catch (a) {
-        a.message.includes("exists") || F(a);
+      } catch (n) {
+        n.message.includes("exists") || F(n);
       }
     }
   }
@@ -2283,9 +2299,13 @@ class ae {
     if (typeof e != "string") throw new Error("Path must be a string");
     return e.startsWith("/") ? e : `/${e}`;
   }
+  // Config functions
+  async setConfig(e) {
+    return configStore.setConfig(e);
+  }
 }
 export {
-  ae as KFS,
-  he as serviceWorker
+  me as KFS,
+  pe as serviceWorker
 };
 //# sourceMappingURL=kfs.js.map
